@@ -1,3 +1,4 @@
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -21,6 +22,17 @@ module.exports = {
             version: false
         }
     },
+    stats: {
+        assets: false,
+        builtAt: false,
+        hash: false,
+        modules: false,
+        entrypoints: false,
+        version: false
+    },
+    performance: {
+        hints: false
+    },
     entry: './index.js',
     output: {
         path: __dirname + '/dist',
@@ -30,6 +42,7 @@ module.exports = {
         modules: [
             './src/js',
             './src/css',
+            './src/img',
             'node_modules'
         ]
     },
@@ -54,12 +67,22 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(eot|ttf|woff|woff2)$/,
-                loader: 'file-loader'
+                test: /\.woff(2)?$/,
+                loader: 'url-loader' 
+            },
+            {
+                test: /\.ico?/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]'
+                }
             }
         ]
     },
     plugins: [
+        new CleanWebpackPlugin(['dist'], {
+            verbose: false
+        }),
         new HtmlWebpackPlugin({
             template: './src/html/index.html'
         })

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --hot --mode development --config ./webpack.config.js"
+    "start": "webpack-dev-server --hot --mode development --config ./webpack.config.js",
+    "build": "webpack --mode production --config ./webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -30,11 +31,13 @@
     "@babel/preset-react": "7.0.0",
     "autoprefixer": "9.3.1",
     "babel-loader": "8.0.4",
+    "clean-webpack-plugin": "1.0.0",
     "css-loader": "1.0.1",
     "file-loader": "2.0.0",
     "html-webpack-plugin": "3.2.0",
     "postcss-loader": "3.0.0",
     "style-loader": "0.23.1",
+    "url-loader": "1.1.2",
     "webpack": "4.25.1",
     "webpack-cli": "3.1.2",
     "webpack-dev-server": "3.1.10"

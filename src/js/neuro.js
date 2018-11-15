@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 import App from 'components/App';
 
-import 'typeface-roboto';
+import 'fonts.css';
 import 'neuro.css';
+import 'favicon.ico';
 
 ReactDOM.render(<App />, document.getElementById('main'));
