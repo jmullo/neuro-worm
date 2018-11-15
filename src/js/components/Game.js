@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Canvas from 'components/Canvas';
 import { initGame, restartGame, startSimulation, setGameOptions } from 'game/engine';
+import { getGrid } from 'game/extract';
 
 let round = 0;
 
@@ -13,7 +14,7 @@ export default class Game extends React.Component {
     state = {
         status: {
             age: 0,
-            score: 0
+            length: 0
         }
     }
 
@@ -45,14 +46,15 @@ export default class Game extends React.Component {
     }
 
     handleSimulationStatus = (status) => {
-        if (status.score > 3) {
+        if (status.length > 3) {
             console.log(status);
         }
 
-        if (round < 10000) {
+        if (round < 100) {
             _.defer(this.simulate);
         } else {
             round = 0;
+            console.log(getGrid());
             console.log('finished');
         }
     }
@@ -64,7 +66,7 @@ export default class Game extends React.Component {
             <Grid container spacing={8}>
                 <Grid item>
                     <Paper id='status'>
-                        <Typography>Score: {status.score}, Age: {status.age}</Typography>
+                        <Typography>Length: {status.length}, Age: {status.age}</Typography>
                     </Paper>
                 </Grid>
                 <Grid item>

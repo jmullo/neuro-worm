@@ -1,5 +1,4 @@
 let queue = [];
-let keyCallback;
 
 export const initKeys = () => {
     document.removeEventListener('keydown', handleKey);

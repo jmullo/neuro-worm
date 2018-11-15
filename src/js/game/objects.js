@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { foodHitsSnake, headHitsSnake, headHitsFood, headHitsWall } from 'game/collisions';
 import { directionToDelta, random, randomDirection, fixOppositeDirection } from 'game/utils';
 import { GRID_WIDTH, GRID_HEIGHT } from 'game/constants';
@@ -11,12 +13,12 @@ export const obj = {
 export const initWalls = () => {
     obj.walls = [];
 
-    [...Array(GRID_WIDTH).keys()].forEach((x) => {
+    _.range(GRID_WIDTH).forEach((x) => {
         obj.walls.push({x: x, y: 0});
         obj.walls.push({x: x, y: GRID_HEIGHT - 1});
     });
 
-    [...Array(GRID_HEIGHT).keys()].forEach((y) => {
+    _.range(GRID_HEIGHT).forEach((y) => {
         obj.walls.push({x: 0, y: y});
         obj.walls.push({x: GRID_WIDTH - 1, y: y});
     });
@@ -24,8 +26,8 @@ export const initWalls = () => {
 
 export const initFood = () => {
     obj.food = {
-        x: random(1, GRID_WIDTH - 1),
-        y: random(1, GRID_HEIGHT- 1)
+        x: _.random(1, GRID_WIDTH - 2),
+        y: _.random(1, GRID_HEIGHT - 2)
     };
 
     checkFoodPosition();

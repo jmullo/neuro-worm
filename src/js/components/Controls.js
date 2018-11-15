@@ -11,7 +11,6 @@ export default class Controls extends React.Component {
 
     handleGameSpeedChange = (event, value) => {
         this.setState({ speed: value });
-
         this.handleOptionsChange();
     }
 

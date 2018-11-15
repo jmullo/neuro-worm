@@ -102,7 +102,7 @@ const simulate = () => {
     } else {
         simulationCallback({
             age: age,
-            score: obj.snake.length,
+            length: obj.snake.length,
             alive: false
         });
     }
@@ -118,7 +118,7 @@ const render = () => {
 const updateStatus = (alive) => {
     const status = {
         age: ++age,
-        score: obj.snake.length,
+        length: obj.snake.length,
         alive: alive
     };
 

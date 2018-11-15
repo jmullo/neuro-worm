@@ -1,24 +1,18 @@
-export const random = (min, max) => {
-    return Math.floor(Math.random() * (max - min) ) + min;
-};
+import _ from 'lodash';
 
 export const randomDirection = () => {
-    return ['left', 'right', 'up', 'down'][Math.floor(Math.random() * 4)];
+    return ['left', 'right', 'up', 'down'][_.random(3)];
 };
 
 export const directionToDelta = (direction) => {
-    if (direction === 'left') {
-        return {x: -1, y: 0};
+    const deltas = {
+        left: {x: -1, y: 0},
+        right: {x: 1, y: 0},
+        up: {x: 0, y: -1},
+        down: {x: 0, y: 1}
+    };
 
-    } else if (direction === 'right') {
-        return {x: 1, y: 0};
-
-    } else if (direction === 'up') {
-        return {x: 0, y: -1};
-
-    } else if (direction === 'down') {
-        return {x: 0, y: 1};
-    }
+    return deltas[direction];
 };
 
 export const fixOppositeDirection = (direction, prevDirection) => {
