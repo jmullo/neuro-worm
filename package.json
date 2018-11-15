@@ -1,0 +1,51 @@
+{
+  "name": "neuro",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --hot --mode development --config ./webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmullo/neuro-worm.git"
+  },
+  "keywords": [
+    "neuro",
+    "worm",
+    "neural",
+    "network",
+    "neuroevolution"
+  ],
+  "author": "Jussi Mullo <mulloju@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmullo/neuro-worm/issues"
+  },
+  "homepage": "https://github.com/jmullo/neuro-worm",
+  "devDependencies": {
+    "@babel/core": "7.1.5",
+    "@babel/plugin-proposal-class-properties": "7.1.0",
+    "@babel/preset-env": "7.1.5",
+    "@babel/preset-react": "7.0.0",
+    "autoprefixer": "9.3.1",
+    "babel-loader": "8.0.4",
+    "css-loader": "1.0.1",
+    "file-loader": "2.0.0",
+    "html-webpack-plugin": "3.2.0",
+    "postcss-loader": "3.0.0",
+    "style-loader": "0.23.1",
+    "webpack": "4.25.1",
+    "webpack-cli": "3.1.2",
+    "webpack-dev-server": "3.1.10"
+  },
+  "dependencies": {
+    "@babel/polyfill": "7.0.0",
+    "@material-ui/core": "3.5.1",
+    "@material-ui/lab": "3.0.0-alpha.23",
+    "lodash": "4.17.11",
+    "react": "16.6.1",
+    "react-dom": "16.6.1",
+    "typeface-roboto": "0.0.54"
+  }
+}
