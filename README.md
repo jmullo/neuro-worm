@@ -1,3 +1,3 @@
 # neuro-worm
 
-Description
+A project for testing neural networks & evolutionary algorithms.
