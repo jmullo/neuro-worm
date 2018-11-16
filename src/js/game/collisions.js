@@ -1,17 +1,19 @@
-export const foodHitsSnake = (food, snake) => {
-    return tileHitsArray(food, snake);
+import { obj } from 'game/objects';
+
+export const foodHitsSnake = () => {
+    return tileHitsArray(obj.food, obj.snake);
 };
 
-export const headHitsSnake = (head, snake) => {
-    return tileHitsArray(head, snake.slice(1));
+export const headHitsSnake = () => {
+    return tileHitsArray(obj.head, obj.snake.slice(1));
 };
 
-export const headHitsFood = (head, food) => {
-    return head.x === food.x && head.y === food.y;
+export const headHitsFood = () => {
+    return obj.head.x === obj.food.x && obj.head.y === obj.food.y;
 };
 
-export const headHitsWall = (head, walls) => {
-    return tileHitsArray(head, walls);
+export const headHitsWall = () => {
+    return tileHitsArray(obj.head, obj.walls);
 };
 
 const tileHitsArray = (tile, array) => {

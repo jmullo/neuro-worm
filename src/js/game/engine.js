@@ -9,6 +9,8 @@ let getSimulatedKey;
 let statusCallback;
 let simulationCallback;
 let frameRequest;
+let direction;
+let alive;
 let timer;
 let delay;
 let age;
@@ -20,7 +22,6 @@ export const initGame = (context, callback, simFunction, simCallback) => {
 
     setDrawOptions(context);
     initKeys();
-
     initWalls();
     initSnake();
 
@@ -32,31 +33,26 @@ export const setGameOptions = ({speed}) => {
 };
 
 export const startSimulation = () => {
-    stopGame();
-    resetKeys();
-
-    initWalls();
-    initSnake();
-    initFood();
-
-    drawGrid();
-
     age = 0;
 
+    reset();
+    drawGrid();
     simulate();
 };
 
 export const restartGame = () => {
+    age = 0;
+
+    reset();
+    loop();
+};
+
+const reset = () => {
     stopGame();
     resetKeys();
-
     initWalls();
     initSnake();
     initFood();
-
-    age = 0;
-
-    loop();
 };
 
 const stopGame = () => {
@@ -70,57 +66,49 @@ const stopGame = () => {
 };
 
 const endGame = () => {
-    drawHit(obj.snake);
+    drawHit();
     stopGame();
 };
 
 const loop = () => {
     timer = setTimeout(() => {
         frameRequest = window.requestAnimationFrame(loop);
-
-        const direction = getKey();
-        //const direction = ['left', 'right', 'up', 'down'][Math.floor(Math.random() * 4)];
-        const alive = updateSnake(direction);
+        direction = getKey();
+        alive = updateSnake(direction);
         
-        updateStatus(alive);
+        statusCallback(getStatus(alive));
 
         if (alive) {
+            age++;
             render();
         } else {
             endGame();
         }
+
     }, delay);
 };
 
 const simulate = () => {
-    const direction = getSimulatedKey();
-    const alive = updateSnake(direction);
+    direction = getSimulatedKey();
+    alive = updateSnake(direction);
 
     if (alive) {
         age++;
         simulate();
     } else {
-        simulationCallback({
-            age: age,
-            length: obj.snake.length,
-            alive: false
-        });
+        simulationCallback(getStatus(false));
     }
 };
 
 const render = () => {
     drawGrid();
-    drawWalls(obj.walls);
-    drawFood(obj.food);
-    drawSnake(obj.snake);
+    drawWalls();
+    drawFood();
+    drawSnake();
 };
 
-const updateStatus = (alive) => {
-    const status = {
-        age: ++age,
-        length: obj.snake.length,
-        alive: alive
-    };
-
-    statusCallback(status);
-};
+const getStatus = (alive) => ({
+    age: age,
+    length: obj.snake.length,
+    alive: alive
+});

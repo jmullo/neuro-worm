@@ -1,3 +1,5 @@
+import { obj } from 'game/objects';
+
 import {
     GRID_WIDTH, GRID_HEIGHT,
     GRID_COLOR, GRID_BORDER_COLOR,
@@ -25,24 +27,24 @@ export const drawGrid = () => {
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 };
 
-export const drawWalls = (walls) => {
-    walls.forEach((tile) => {
+export const drawWalls = () => {
+    obj.walls.forEach((tile) => {
         drawTile(tile, WALL_COLOR, WALL_BORDER_COLOR);
     });
 };
 
-export const drawFood = (tile) => {
-    drawTile(tile, FOOD_COLOR, FOOD_BORDER_COLOR);
+export const drawFood = () => {
+    drawTile(obj.food, FOOD_COLOR, FOOD_BORDER_COLOR);
 };
 
-export const drawSnake = (snake) => {
-    snake.forEach((tile) => {
+export const drawSnake = () => {
+    obj.snake.forEach((tile) => {
         drawTile(tile, SNAKE_COLOR, SNAKE_BORDER_COLOR);
     });
 };
 
-export const drawHit = (snake) => {
-    snake.slice(1, 2).forEach((tile) => {
+export const drawHit = () => {
+    obj.snake.slice(1, 2).forEach((tile) => {
         drawTile(tile, HIT_COLOR, HIT_BORDER_COLOR);
     });
 };

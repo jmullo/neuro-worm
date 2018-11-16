@@ -50,11 +50,11 @@ export default class Game extends React.Component {
             console.log(status);
         }
 
-        if (round < 100) {
+        if (round < 1000) {
             _.defer(this.simulate);
         } else {
             round = 0;
-            console.log(getGrid());
+            //console.log(getGrid());
             console.log('finished');
         }
     }

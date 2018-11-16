@@ -1,13 +1,17 @@
 import _ from 'lodash';
 
 import { foodHitsSnake, headHitsSnake, headHitsFood, headHitsWall } from 'game/collisions';
-import { directionToDelta, random, randomDirection, fixOppositeDirection } from 'game/utils';
+import { directionToVector, randomDirection, fixOppositeDirection } from 'game/utils';
 import { GRID_WIDTH, GRID_HEIGHT } from 'game/constants';
+
+let vector;
+let dir;
 
 export const obj = {
     walls: undefined,
     food: undefined,
-    snake: undefined
+    snake: undefined,
+    head: undefined
 };
 
 export const initWalls = () => {
@@ -35,40 +39,43 @@ export const initFood = () => {
 
 export const initSnake = () => {
     obj.snake = [
-        {x: Math.floor(GRID_WIDTH / 2), y: Math.floor(GRID_HEIGHT / 2), direction: randomDirection()}
+        {
+            x: Math.floor(GRID_WIDTH / 2),
+            y: Math.floor(GRID_HEIGHT / 2),
+            direction: randomDirection()
+        }
     ];
 };
 
 export const updateSnake = (direction) => {
-    let dir = direction || obj.snake[0].direction;
-    
+    dir = direction || obj.snake[0].direction;
     dir = fixOppositeDirection(dir, obj.snake[0].direction);
+    vector = directionToVector(dir);
 
-    const delta = directionToDelta(dir);
-
-    const head = {
-        x: obj.snake[0].x + delta.x,
-        y: obj.snake[0].y + delta.y,
+    obj.head = {
+        x: obj.snake[0].x + vector.x,
+        y: obj.snake[0].y + vector.y,
         direction: dir
     };
 
-    obj.snake.unshift(head);
-
-    if (headHitsSnake(head, obj.snake) || headHitsWall(head, obj.walls)) {
-        return false;
+    obj.snake.unshift(obj.head);
     
-    } else if (headHitsFood(head, obj.food)) {
+    if (headHitsFood()) {
         initFood();
-    
-    } else {
-        obj.snake.pop();
+        return true;
+    }
+
+    obj.snake.pop();
+
+    if (headHitsSnake() || headHitsWall()) {
+        return false;
     }
 
     return true;
 };
 
 const checkFoodPosition = () => {
-    if (foodHitsSnake(obj.food, obj.snake)) {
+    if (foodHitsSnake()) {
         initFood();
         checkFoodPosition();
     }
