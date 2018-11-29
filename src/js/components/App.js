@@ -6,6 +6,8 @@ import Paper from '@material-ui/core/Paper';
 import Controls from 'components/Controls';
 import Game from 'components/Game';
 
+import { evolve } from 'ai/network';
+
 export default class App extends React.Component {
     game = React.createRef();
 
@@ -13,12 +15,20 @@ export default class App extends React.Component {
         this.game.current.updateOptions(options);
     }
 
-    handleStartGame = () => {
+    handlePlay = () => {
         this.game.current.startGame();
     }
 
-    handleSimulate = () => {
-        this.game.current.simulate();
+    handleRunAi = () => {
+        this.game.current.startGame(true);
+    }
+
+    handleEvolve = () => {
+        evolve(this.game.current.simulate, this.handleEvolutionComplete);
+    }
+
+    handleEvolutionComplete = (bestGenome) => {
+        this.game.current.setAi(bestGenome);
     }
 
     render() {
@@ -31,8 +41,9 @@ export default class App extends React.Component {
                             <Paper id='controls'>
                                 <Controls
                                     onChange={this.handleOptionsChange}
-                                    onStartGame={this.handleStartGame}
-                                    onSimulate={this.handleSimulate} />
+                                    onPlay={this.handlePlay}
+                                    onRunAi={this.handleRunAi}
+                                    onEvolve={this.handleEvolve} />
                             </Paper>
                         </Grid>
                         <Grid item>

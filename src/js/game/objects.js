@@ -45,11 +45,13 @@ export const initSnake = () => {
             direction: randomDirection()
         }
     ];
+
+    obj.head = obj.snake[0];
 };
 
 export const updateSnake = (direction) => {
     dir = direction || obj.snake[0].direction;
-    dir = fixOppositeDirection(dir, obj.snake[0].direction);
+    //dir = fixOppositeDirection(dir, obj.snake[0].direction);
     vector = directionToVector(dir);
 
     obj.head = {
@@ -65,11 +67,11 @@ export const updateSnake = (direction) => {
         return true;
     }
 
-    obj.snake.pop();
-
     if (headHitsSnake() || headHitsWall()) {
         return false;
     }
+
+    obj.snake.pop();
 
     return true;
 };

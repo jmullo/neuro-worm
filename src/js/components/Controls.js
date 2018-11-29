@@ -14,16 +14,20 @@ export default class Controls extends React.Component {
         this.handleOptionsChange();
     }
 
-    handleStartGameClick = () => {
-        this.props.onStartGame();
-    }
-
-    handleSimulateClick = () => {
-        this.props.onSimulate();
-    }
-
     handleOptionsChange = () => {
         this.props.onChange(this.state);
+    }
+
+    handlePlayClick = () => {
+        this.props.onPlay();
+    }
+
+    handleRunAiClick = () => {
+        this.props.onRunAi();
+    }
+
+    handleEvolveClick = () => {
+        this.props.onEvolve();
     }
 
     componentDidMount() {
@@ -47,12 +51,17 @@ export default class Controls extends React.Component {
                     variant='outlined'
                     mini
                     autoFocus
-                    onClick={this.handleStartGameClick}>Start game</Button>
+                    onClick={this.handlePlayClick}>Play</Button>
                 <Button
                     className='button'
                     variant='outlined'
                     mini
-                    onClick={this.handleSimulateClick}>Simulate</Button>
+                    onClick={this.handleRunAiClick}>Run AI</Button>
+                <Button
+                    className='button'
+                    variant='outlined'
+                    mini
+                    onClick={this.handleEvolveClick}>Evolve</Button>
             </div>
         );
     }

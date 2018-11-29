@@ -5,10 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
 import Canvas from 'components/Canvas';
-import { initGame, restartGame, startSimulation, setGameOptions } from 'game/engine';
-import { getGrid } from 'game/extract';
 
-let round = 0;
+import { initGame, restartGame, startSimulation, setGameOptions, setGameAi } from 'game/engine';
 
 export default class Game extends React.Component {
     state = {
@@ -22,41 +20,24 @@ export default class Game extends React.Component {
         setGameOptions(options);
     }
 
-    startGame = () => {
-        restartGame();
+    startGame = (runAi) => {
+        restartGame(runAi);
     }
 
-    simulate = () => {
-        startSimulation();
-        round++;
+    setAi = (ai) => {
+        setGameAi(ai);
     }
 
-    simulateFunction = () => {
-        return ['up', 'down', 'left', 'right'][Math.floor(Math.random() * 4)];
+    simulate = (simulationFunction, simulationCallback) => {
+        startSimulation(simulationFunction, simulationCallback);
     }
 
     handleCanvasReady = (context) => {
-        initGame(context, this.handleStatusUpdated, this.simulateFunction, this.handleSimulationStatus);
+        initGame(context, this.handleStatusUpdated);
     }
 
     handleStatusUpdated = (status) => {
-        if (!_.isEqual(this.state.status, status)) {
-            this.setState({ status });
-        }
-    }
-
-    handleSimulationStatus = (status) => {
-        if (status.length > 3) {
-            console.log(status);
-        }
-
-        if (round < 1000) {
-            _.defer(this.simulate);
-        } else {
-            round = 0;
-            //console.log(getGrid());
-            console.log('finished');
-        }
+        this.setState({ status });
     }
     
     render() {

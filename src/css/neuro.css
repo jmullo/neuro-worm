@@ -53,5 +53,6 @@ html, body {
 }
 
 .button {
+    width: 85px;
     margin: 4px !important;
 }

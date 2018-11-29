@@ -1,5 +1,5 @@
-export const GRID_WIDTH = 40;
-export const GRID_HEIGHT = 40;
+export const GRID_WIDTH = 20;
+export const GRID_HEIGHT = 20;
 
 export const TIME_DELAY = 200;
 

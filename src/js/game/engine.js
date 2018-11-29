@@ -3,28 +3,31 @@ import _ from 'lodash';
 import { setDrawOptions, drawGrid, drawWalls, drawFood, drawSnake, drawHit } from 'game/draw';
 import { obj, initWalls, initFood, initSnake, updateSnake } from 'game/objects';
 import { initKeys, resetKeys, getKey } from 'game/keys';
+import { floatToDirection, arrayToDirection } from 'game/utils';
+import { getState } from 'game/state';
 import { TIME_DELAY } from 'game/constants';
 
-let getSimulatedKey;
 let statusCallback;
 let simulationCallback;
 let frameRequest;
 let direction;
+let output;
 let alive;
 let timer;
 let delay;
+let runAi;
 let age;
+let ai;
 
-export const initGame = (context, callback, simFunction, simCallback) => {
+let calls = 0;
+
+export const initGame = (context, callback) => {
     statusCallback = callback;
-    getSimulatedKey = simFunction;
-    simulationCallback = simCallback;
 
     setDrawOptions(context);
     initKeys();
     initWalls();
     initSnake();
-
     render();
 };
 
@@ -32,7 +35,10 @@ export const setGameOptions = ({speed}) => {
     delay = TIME_DELAY - (speed * 20);
 };
 
-export const startSimulation = () => {
+export const startSimulation = (aiObject, callback) => {
+    ai = aiObject;
+    simulationCallback = callback;
+
     age = 0;
 
     reset();
@@ -40,11 +46,16 @@ export const startSimulation = () => {
     simulate();
 };
 
-export const restartGame = () => {
+export const restartGame = (runAiGame) => {
+    runAi = runAiGame;
     age = 0;
 
     reset();
     loop();
+};
+
+export const setGameAi = (aiObject) => {
+    ai = aiObject;
 };
 
 const reset = () => {
@@ -65,15 +76,19 @@ const stopGame = () => {
     }
 };
 
-const endGame = () => {
-    drawHit();
-    stopGame();
-};
-
 const loop = () => {
     timer = setTimeout(() => {
         frameRequest = window.requestAnimationFrame(loop);
-        direction = getKey();
+
+        if (runAi) {
+            output = ai.activate(getState());
+            //direction = floatToDirection(output);
+            direction = arrayToDirection(output);
+
+        } else {
+            direction = getKey();
+        }
+        
         alive = updateSnake(direction);
         
         statusCallback(getStatus(alive));
@@ -82,21 +97,32 @@ const loop = () => {
             age++;
             render();
         } else {
-            endGame();
+            drawHit();
+            stopGame();
         }
 
     }, delay);
 };
 
 const simulate = () => {
-    direction = getSimulatedKey();
+    output = ai.activate(getState());
+    //direction = floatToDirection(output);
+    direction = arrayToDirection(output);
     alive = updateSnake(direction);
 
-    if (alive) {
+    if (alive && age < ai.maxAge) {
         age++;
-        simulate();
+
+        if (++calls % 1000 === 0) {
+            calls = 0;
+            _.delay(simulate, 0);
+
+        } else {
+            simulate();
+        }
+        
     } else {
-        simulationCallback(getStatus(false));
+        simulationCallback(getStatus(alive));
     }
 };
 
