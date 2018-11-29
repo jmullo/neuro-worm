@@ -5,10 +5,18 @@ import Paper from '@material-ui/core/Paper';
 
 import Controls from 'components/Controls';
 import Game from 'components/Game';
+import Info from 'components/Info';
 
-import { evolve } from 'ai/network';
+import { evolve, getAi } from 'ai/network';
 
 export default class App extends React.Component {
+    state = {
+        running: false,
+        evolving: false,
+        showInfo: false,
+        stats: []
+    }
+
     game = React.createRef();
 
     handleOptionsChange = (options) => {
@@ -17,18 +25,50 @@ export default class App extends React.Component {
 
     handlePlay = () => {
         this.game.current.startGame();
+        
+        this.setState({
+            running: true,
+            showInfo: false
+        });
+    }
+
+    handleGameEnd = () => {
+        this.setState({ running: false });
     }
 
     handleRunAi = () => {
-        this.game.current.startGame(true);
+        this.game.current.startAiGame();
+
+        this.setState({
+            showInfo: false
+        });
     }
 
     handleEvolve = () => {
-        evolve(this.game.current.simulate, this.handleEvolutionComplete);
+        evolve(this.game.current.simulate, this.handleEvolutionUpdate);
+        
+        this.setState({ 
+            evolving: true,
+            showInfo: true
+        });
     }
 
-    handleEvolutionComplete = (bestGenome) => {
-        this.game.current.setAi(bestGenome);
+    handleEvolutionUpdate = (data) => {
+        if (data.ready) {
+            this.game.current.setAi(data.bestGenome);
+
+            this.setState({ 
+                evolving: false,
+                stats: [...this.state.stats, data.stats]
+            });
+
+        } else {
+            this.setState({ stats: [...this.state.stats, data.stats] });
+        }
+    }
+
+    componentDidMount() {
+        this.game.current.setAi(getAi());
     }
 
     render() {
@@ -36,19 +76,34 @@ export default class App extends React.Component {
             <React.Fragment>
                 <CssBaseline />
                 <div id='flex'>
-                    <Grid id='content' container spacing={8}>
+                    <Grid 
+                        id='content'
+                        container
+                        spacing={8}>
+
                         <Grid item>
                             <Paper id='controls'>
                                 <Controls
+                                    disabled={this.state.running || this.state.evolving}
                                     onChange={this.handleOptionsChange}
                                     onPlay={this.handlePlay}
                                     onRunAi={this.handleRunAi}
                                     onEvolve={this.handleEvolve} />
                             </Paper>
                         </Grid>
+
                         <Grid item>
-                            <Game ref={this.game} />
+                            <Game
+                                ref={this.game}
+                                showCanvas={!this.state.showInfo}
+                                showStatus={!this.state.evolving}
+                                onEnd={this.handleGameEnd} />
+
+                            <Info
+                                stats={this.state.stats}
+                                visible={this.state.showInfo}/>
                         </Grid>
+
                     </Grid>
                 </div>
             </React.Fragment>

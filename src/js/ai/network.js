@@ -15,14 +15,15 @@ const maxAge = 1000;
 const inputSize = 12;
 const hiddenSize = 6;
 const outputSize = 4;
-const generations = 100;
-const populationSize = 200;
+const generations = 10;
+const populationSize = 100;
 const elitismPercent = 10;
-const mutationRate = 90;
-const mutationAmount = 200;
+const mutationRate = 50;
+const mutationAmount = 50;
 
 let generation = 0;
 let genomeAges = [];
+let genomeScores = [];
 
 neat = new Neat(
     inputSize,
@@ -58,6 +59,10 @@ neat = new Neat(
 
 genomeIndex = 0;
 
+export const getAi = () => {
+    return genome || neat.population[0];
+};
+
 export const evolve = (simFunction, callback) => {
     if (simFunction) {
         simulationFunction = simFunction;
@@ -85,19 +90,36 @@ const selectNextGenome = () => {
 
 const selectNextGeneration = async () => {
     const bestGenome = await neat.evolve();
+
+    const stats = {
+        generation: neat.generation,
+        avgAge: Math.floor(_.mean(genomeAges)),
+        avgScore: Math.floor(_.mean(genomeScores)),
+        maxScore: Math.floor(bestGenome.score)
+    }
     
-    console.log(`generation: ${neat.generation}, avg age: ${Math.floor(_.mean(genomeAges))}, best score: ${Math.floor(bestGenome.score)}`);
-    //console.log(bestGenome);
+    //console.log(`generation: ${stats.generation}, avg age: ${stats.avgAge}, avg score: ${stats.avgScore}, max score: ${stats.maxScore}`);
 
     genomeIndex = 0;
     genomeAges = [];
+    genomeScores = [];
 
     if (++generation < generations) {
+        evolutionCallback({
+            ready: false,
+            stats: stats
+        });
+
         evolve();
 
     } else {
         generation = 0;
-        evolutionCallback(bestGenome);
+
+        evolutionCallback({
+            ready: true,
+            bestGenome: bestGenome,
+            stats: stats
+        });
     }
 };
 
@@ -109,6 +131,7 @@ const simulationCallback = (status) => {
     }
 
     genomeAges.push(status.age);
+    genomeScores.push(genome.score);
     
     evolve();
 };

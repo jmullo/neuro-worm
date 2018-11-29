@@ -20,12 +20,17 @@ export default class Game extends React.Component {
         setGameOptions(options);
     }
 
-    startGame = (runAi) => {
-        restartGame(runAi);
+    startGame = () => {
+        restartGame(false);
+    }
+
+    startAiGame = () => {
+        restartGame(true);
     }
 
     setAi = (ai) => {
         setGameAi(ai);
+        this.setState({ status: null });
     }
 
     simulate = (simulationFunction, simulationCallback) => {
@@ -38,23 +43,44 @@ export default class Game extends React.Component {
 
     handleStatusUpdated = (status) => {
         this.setState({ status });
+
+        if (!status.alive) {
+            this.props.onEnd();
+        }
+    }
+
+    renderStatus = () => {
+        const { status } = this.state;
+
+        if (this.props.showStatus && status) {
+            return (
+                <Typography>Length: {status.length}, Age: {status.age}</Typography>
+            );
+        }
+
+        return null;
     }
     
     render() {
-        const {status} = this.state;
+        const className = this.props.showCanvas ? '' : 'hidden';
 
         return (
-            <Grid container spacing={8}>
+            <Grid 
+                container
+                spacing={8}>
+
                 <Grid item>
                     <Paper id='status'>
-                        <Typography>Length: {status.length}, Age: {status.age}</Typography>
+                        {this.renderStatus()}
                     </Paper>
                 </Grid>
+
                 <Grid item>
-                    <Paper>
+                    <Paper className={className}>
                         <Canvas onReady={this.handleCanvasReady} />
                     </Paper>
                 </Grid>
+
             </Grid>
         );
     }

@@ -6,7 +6,7 @@ import Slider from '@material-ui/lab/Slider';
 
 export default class Controls extends React.Component {
     state = {
-        speed: 5
+        speed: 6
     }
 
     handleGameSpeedChange = (event, value) => {
@@ -37,7 +37,6 @@ export default class Controls extends React.Component {
     render() {
         return (
             <div>
-                
                 <Typography>Game speed: {this.state.speed}</Typography>
                 <Slider
                     className='slider'
@@ -46,21 +45,27 @@ export default class Controls extends React.Component {
                     max={10}
                     step={1}
                     onChange={this.handleGameSpeedChange} />
+
                 <Button
                     className='button'
                     variant='outlined'
                     mini
                     autoFocus
+                    disabled={this.props.disabled}
                     onClick={this.handlePlayClick}>Play</Button>
+
                 <Button
                     className='button'
                     variant='outlined'
                     mini
+                    disabled={this.props.disabled}
                     onClick={this.handleRunAiClick}>Run AI</Button>
+
                 <Button
                     className='button'
                     variant='outlined'
                     mini
+                    disabled={this.props.disabled}
                     onClick={this.handleEvolveClick}>Evolve</Button>
             </div>
         );
