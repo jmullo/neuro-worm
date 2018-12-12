@@ -6,6 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Controls from 'components/Controls';
 import Game from 'components/Game';
 import Info from 'components/Info';
+import Graph from 'components/Graph';
 
 import { evolve, getAi } from 'ai/network';
 
@@ -76,6 +77,7 @@ export default class App extends React.Component {
             <React.Fragment>
                 <CssBaseline />
                 <div id='flex'>
+
                     <Grid 
                         id='content'
                         container
@@ -104,7 +106,14 @@ export default class App extends React.Component {
                                 visible={this.state.showInfo}/>
                         </Grid>
 
+                        <Grid item>
+                            <Paper id='graph'>
+                                <Graph stats={this.state.stats}/>
+                            </Paper>
+                        </Grid>
+
                     </Grid>
+
                 </div>
             </React.Fragment>
         );

@@ -65,7 +65,8 @@ export default class Game extends React.Component {
         const className = this.props.showCanvas ? '' : 'hidden';
 
         return (
-            <Grid 
+            <Grid
+                id='gameFlex' 
                 container
                 spacing={8}>
 

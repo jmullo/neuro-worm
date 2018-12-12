@@ -6,19 +6,17 @@ export default class Info extends React.Component {
     renderStats = () => {
         let gen;
         let avgAge;
-        let avgScore;
-        let maxScore;
+        let bestScore;
 
         return (
             _.takeRight(this.props.stats, 31).map(row => {
-                gen = row.generation.toString().padStart(5);
-                avgAge = row.avgAge.toString().padStart(5);
-                avgScore = row.avgScore.toString().padStart(5);
-                maxScore = row.maxScore.toString().padStart(5);
+                gen = row.generation.toString().padEnd(7);
+                avgAge = row.avgAge.toString().padEnd(8);
+                bestScore = row.bestScore.toString().padEnd(6);
 
                 return (
                     <div key={row.generation}>
-                        gen: {gen}, avgAge: {avgAge}, avgScr: {avgScore}, maxScr: {maxScore} 
+                        generation: {gen} mean age: {avgAge} best score: {bestScore} 
                     </div>
                 );
             })

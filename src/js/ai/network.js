@@ -8,22 +8,21 @@ let simulationFunction;
 let evolutionCallback;
 
 const lengthScore = 1;
-const ageScore = -0.02;
-const deathScore = -2;
+const ageScore = 0;
+const deathScore = -1;
 const maxAge = 1000;
 
 const inputSize = 12;
-const hiddenSize = 6;
+const hiddenSize = 4;
 const outputSize = 4;
-const generations = 10;
-const populationSize = 100;
-const elitismPercent = 10;
+const generations = 50;
+const populationSize = 750;
+const elitismPercent = 75;
 const mutationRate = 50;
 const mutationAmount = 50;
 
 let generation = 0;
 let genomeAges = [];
-let genomeScores = [];
 
 neat = new Neat(
     inputSize,
@@ -94,15 +93,11 @@ const selectNextGeneration = async () => {
     const stats = {
         generation: neat.generation,
         avgAge: Math.floor(_.mean(genomeAges)),
-        avgScore: Math.floor(_.mean(genomeScores)),
-        maxScore: Math.floor(bestGenome.score)
+        bestScore: Math.floor(bestGenome.score)
     }
     
-    //console.log(`generation: ${stats.generation}, avg age: ${stats.avgAge}, avg score: ${stats.avgScore}, max score: ${stats.maxScore}`);
-
     genomeIndex = 0;
     genomeAges = [];
-    genomeScores = [];
 
     if (++generation < generations) {
         evolutionCallback({
@@ -131,7 +126,6 @@ const simulationCallback = (status) => {
     }
 
     genomeAges.push(status.age);
-    genomeScores.push(genome.score);
     
     evolve();
 };
