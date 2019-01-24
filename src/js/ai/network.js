@@ -10,18 +10,18 @@ let evolutionCallback;
 const lengthScore = 1;
 const ageScore = 0;
 const deathScore = -1;
-let maxAge = 200;
+let maxAge = 100;
 
 const inputSize = 12;
-const hiddenSize = 12;
+const hiddenSize = 6;
 const outputSize = 4;
 
-const lives = 4;
-const generations = 10;
-const populationSize = 100;
-const elitismPercent = 75;
-const mutationRate = 50;
-const mutationAmount = 50;
+const lives = 2;
+const generations = 100;
+const populationSize = 500;
+const elitismPercent = 25;
+const mutationRate = 0.7;
+const mutationAmount = 6;
 
 let generation = 0;
 let genomeAges = [];
@@ -109,7 +109,8 @@ const selectNextGeneration = async () => {
         });
 
         if (stats.bestScore / maxAge > 0.1) {
-            maxAge += 20;
+            maxAge += 10;
+            console.log('maxAge: ', maxAge);
         }
 
         evolve();
