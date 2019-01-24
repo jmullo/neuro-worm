@@ -10,13 +10,15 @@ let evolutionCallback;
 const lengthScore = 1;
 const ageScore = 0;
 const deathScore = -1;
-const maxAge = 1000;
+let maxAge = 200;
 
 const inputSize = 12;
-const hiddenSize = 4;
+const hiddenSize = 12;
 const outputSize = 4;
-const generations = 50;
-const populationSize = 750;
+
+const lives = 4;
+const generations = 10;
+const populationSize = 100;
 const elitismPercent = 75;
 const mutationRate = 50;
 const mutationAmount = 50;
@@ -81,6 +83,7 @@ const selectNextGenome = () => {
     if (neat.population[genomeIndex]) {
         genome = neat.population[genomeIndex++];
         genome.maxAge = maxAge;
+        genome.lives = lives;
 
     } else {
         genome = null;
@@ -105,6 +108,10 @@ const selectNextGeneration = async () => {
             stats: stats
         });
 
+        if (stats.bestScore / maxAge > 0.1) {
+            maxAge += 20;
+        }
+
         evolve();
 
     } else {
@@ -119,13 +126,19 @@ const selectNextGeneration = async () => {
 };
 
 const simulationCallback = (status) => {
-    genome.score = (status.length * lengthScore) + (status.age * ageScore) - lengthScore;
+    const score = (status.length * lengthScore) + (status.age * ageScore) - lengthScore;
+
+    genome.score = Math.max(score, genome.score || 0);
 
     if (!status.alive) {
         genome.score += deathScore;
     }
 
-    genomeAges.push(status.age);
+    if (--genome.lives) {
+        simulationFunction(genome, simulationCallback);
+    } else {
+        genomeAges.push(status.age);
     
-    evolve();
+        evolve();
+    }
 };

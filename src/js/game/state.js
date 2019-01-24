@@ -18,8 +18,6 @@ export const getState = () => {
     food = obj.food;
     direction = obj.head.direction;
 
-    //const length = obj.snake.length;
-    
     const goingLeft = direction === 'left';
     const goingRight = direction === 'right';
     const goingUp = direction === 'up';
@@ -34,7 +32,6 @@ export const getState = () => {
     const foodDown = food.y < head.y;
 
     return [
-        //normalize(length, 1, maxLength),
         goingLeft ? 1 : 0,
         goingRight ? 1 : 0,
         goingUp ? 1 : 0,
