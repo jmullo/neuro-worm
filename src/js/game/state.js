@@ -22,10 +22,10 @@ export const getState = () => {
     const goingRight = direction === 'right';
     const goingUp = direction === 'up';
     const goingDown = direction === 'down';
-    const emptyTileLeft = _.get(grid, [obj.head.x - 1, obj.head.y]).type === 'empty';
-    const emptyTileRight = _.get(grid, [obj.head.x + 1, obj.head.y]).type === 'empty';
-    const emptyTileUp = _.get(grid, [obj.head.x, obj.head.y - 1]).type === 'empty';
-    const emptyTileDown = _.get(grid, [obj.head.x, obj.head.y + 1]).type === 'empty';
+    const emptyTileLeft = _.get(grid, [obj.head.x - 1, obj.head.y], 'xx').type === 'empty';
+    const emptyTileRight = _.get(grid, [obj.head.x + 1, obj.head.y], 'xx').type === 'empty';
+    const emptyTileUp = _.get(grid, [obj.head.x, obj.head.y - 1], 'xx').type === 'empty';
+    const emptyTileDown = _.get(grid, [obj.head.x, obj.head.y + 1], 'xx').type === 'empty';
     const foodLeft = food.x < head.x;
     const foodRight = food.x > head.x;
     const foodUp = food.y < head.y;
@@ -63,6 +63,10 @@ const initGrid = () => {
 
         grid.push(column);
     });
+
+    obj.walls.forEach(({x, y}) => {
+        grid[x][y].type = 'wall';
+    });
 };
 
 const updateGrid = () => {
@@ -70,15 +74,15 @@ const updateGrid = () => {
         initGrid();
     }
 
-    grid.forEach((row) => {
-        row.forEach((column) => {
-            column.type = 'empty';
-        });
-    });
+    if (obj.prevFood) {
+        grid[obj.prevFood.x][obj.prevFood.y].type = 'empty';
+        obj.prevFood = null;
+    }
 
-    obj.walls.forEach(({x, y}) => {
-        grid[x][y].type = 'wall';
-    });
+    if (obj.prevSnake) {
+        grid[obj.prevSnake.x][obj.prevSnake.y].type = 'empty';
+        obj.prevSnake = null;
+    }
 
     grid[obj.food.x][obj.food.y].type = 'food';
 
@@ -86,6 +90,4 @@ const updateGrid = () => {
         grid[x][y].type = 'snake';
         grid[x][y].direction = direction;
     });
-
-    grid[obj.snake[0].x][obj.snake[0].y].head = true;
 };

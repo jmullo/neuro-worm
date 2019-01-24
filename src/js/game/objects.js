@@ -11,7 +11,9 @@ export const obj = {
     walls: undefined,
     food: undefined,
     snake: undefined,
-    head: undefined
+    head: undefined,
+    prevFood: undefined,
+    prevSnake: undefined
 };
 
 export const initWalls = () => {
@@ -63,7 +65,10 @@ export const updateSnake = (direction) => {
     obj.snake.unshift(obj.head);
     
     if (headHitsFood()) {
+        obj.prevFood = obj.food;
+        
         initFood();
+
         return true;
     }
 
@@ -71,7 +76,7 @@ export const updateSnake = (direction) => {
         return false;
     }
 
-    obj.snake.pop();
+    obj.prevSnake = obj.snake.pop();
 
     return true;
 };
